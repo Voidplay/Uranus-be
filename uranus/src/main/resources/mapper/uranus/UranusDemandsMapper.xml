@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.UranusDemandsMapper">
+    
+    <resultMap type="UranusDemands" id="UranusDemandsResult">
+        <result property="demandsId"    column="demands_id"    />
+        <result property="demandsName"    column="demands_name"    />
+        <result property="demandsContents"    column="demands_contents"    />
+        <result property="demandsSource"    column="demands_source"    />
+        <result property="demandsUrgency"    column="demands_urgency"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="planTime"    column="plan_time"    />
+        <result property="completeTime"    column="complete_time"    />
+    </resultMap>
+
+    <sql id="selectUranusDemandsVo">
+        select demands_id, demands_name, demands_contents, demands_source, demands_urgency, create_time, plan_time, complete_time from uranus_demands
+    </sql>
+
+    <select id="selectUranusDemandsList" parameterType="UranusDemands" resultMap="UranusDemandsResult">
+        <include refid="selectUranusDemandsVo"/>
+        <where>  
+            <if test="demandsName != null  and demandsName != ''"> and demands_name like concat('%', #{demandsName}, '%')</if>
+            <if test="demandsContents != null  and demandsContents != ''"> and demands_contents = #{demandsContents}</if>
+            <if test="demandsSource != null  and demandsSource != ''"> and demands_source = #{demandsSource}</if>
+            <if test="demandsUrgency != null  and demandsUrgency != ''"> and demands_urgency = #{demandsUrgency}</if>
+            <if test="planTime != null "> and plan_time = #{planTime}</if>
+            <if test="completeTime != null "> and complete_time = #{completeTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectUranusDemandsByDemandsId" parameterType="Long" resultMap="UranusDemandsResult">
+        <include refid="selectUranusDemandsVo"/>
+        where demands_id = #{demandsId}
+    </select>
+        
+    <insert id="insertUranusDemands" parameterType="UranusDemands" useGeneratedKeys="true" keyProperty="demandsId">
+        insert into uranus_demands
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="demandsName != null and demandsName != ''">demands_name,</if>
+            <if test="demandsContents != null and demandsContents != ''">demands_contents,</if>
+            <if test="demandsSource != null and demandsSource != ''">demands_source,</if>
+            <if test="demandsUrgency != null and demandsUrgency != ''">demands_urgency,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="planTime != null">plan_time,</if>
+            <if test="completeTime != null">complete_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="demandsName != null and demandsName != ''">#{demandsName},</if>
+            <if test="demandsContents != null and demandsContents != ''">#{demandsContents},</if>
+            <if test="demandsSource != null and demandsSource != ''">#{demandsSource},</if>
+            <if test="demandsUrgency != null and demandsUrgency != ''">#{demandsUrgency},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="planTime != null">#{planTime},</if>
+            <if test="completeTime != null">#{completeTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUranusDemands" parameterType="UranusDemands">
+        update uranus_demands
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="demandsName != null and demandsName != ''">demands_name = #{demandsName},</if>
+            <if test="demandsContents != null and demandsContents != ''">demands_contents = #{demandsContents},</if>
+            <if test="demandsSource != null and demandsSource != ''">demands_source = #{demandsSource},</if>
+            <if test="demandsUrgency != null and demandsUrgency != ''">demands_urgency = #{demandsUrgency},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="planTime != null">plan_time = #{planTime},</if>
+            <if test="completeTime != null">complete_time = #{completeTime},</if>
+        </trim>
+        where demands_id = #{demandsId}
+    </update>
+
+    <delete id="deleteUranusDemandsByDemandsId" parameterType="Long">
+        delete from uranus_demands where demands_id = #{demandsId}
+    </delete>
+
+    <delete id="deleteUranusDemandsByDemandsIds" parameterType="String">
+        delete from uranus_demands where demands_id in 
+        <foreach item="demandsId" collection="array" open="(" separator="," close=")">
+            #{demandsId}
+        </foreach>
+    </delete>
+</mapper>

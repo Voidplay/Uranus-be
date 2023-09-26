@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.UranusDesignMapper">
+    
+    <resultMap type="UranusDesign" id="UranusDesignResult">
+        <result property="designId"    column="design_id"    />
+        <result property="designName"    column="design_name"    />
+        <result property="designContents"    column="design_contents"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectUranusDesignVo">
+        select design_id, design_name, design_contents, create_time from uranus_design
+    </sql>
+
+    <select id="selectUranusDesignList" parameterType="UranusDesign" resultMap="UranusDesignResult">
+        <include refid="selectUranusDesignVo"/>
+        <where>  
+            <if test="designName != null  and designName != ''"> and design_name like concat('%', #{designName}, '%')</if>
+            <if test="designContents != null  and designContents != ''"> and design_contents = #{designContents}</if>
+        </where>
+    </select>
+    
+    <select id="selectUranusDesignByDesignId" parameterType="Long" resultMap="UranusDesignResult">
+        <include refid="selectUranusDesignVo"/>
+        where design_id = #{designId}
+    </select>
+        
+    <insert id="insertUranusDesign" parameterType="UranusDesign" useGeneratedKeys="true" keyProperty="designId">
+        insert into uranus_design
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="designName != null and designName != ''">design_name,</if>
+            <if test="designContents != null and designContents != ''">design_contents,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="designName != null and designName != ''">#{designName},</if>
+            <if test="designContents != null and designContents != ''">#{designContents},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUranusDesign" parameterType="UranusDesign">
+        update uranus_design
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="designName != null and designName != ''">design_name = #{designName},</if>
+            <if test="designContents != null and designContents != ''">design_contents = #{designContents},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where design_id = #{designId}
+    </update>
+
+    <delete id="deleteUranusDesignByDesignId" parameterType="Long">
+        delete from uranus_design where design_id = #{designId}
+    </delete>
+
+    <delete id="deleteUranusDesignByDesignIds" parameterType="String">
+        delete from uranus_design where design_id in 
+        <foreach item="designId" collection="array" open="(" separator="," close=")">
+            #{designId}
+        </foreach>
+    </delete>
+</mapper>
