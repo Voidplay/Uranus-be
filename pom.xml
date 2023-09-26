@@ -170,6 +170,12 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>uranus</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -180,6 +186,7 @@
         <module>uranus-quartz</module>
         <module>uranus-generator</module>
         <module>uranus-common</module>
+        <module>uranus</module>
     </modules>
     <packaging>pom</packaging>
 
