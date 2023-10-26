@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -33,8 +34,23 @@ public class UranusPositionController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(UranusPosition uranusPosition)
     {
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
         startPage();
         List<UranusPosition> list = uranusPositionService.selectUranusPositionList(uranusPosition);
+        double totalNum = 1;
+        for (UranusPosition position : list) {
+            if (position.getPositionName().equals("total")) {
+                totalNum = position.getPositionNetWorth();
+            }
+        }
+        for (UranusPosition up:list) {
+            if (up.getPositionName().equals("total")){
+                up.setPositionPercent("100%");
+            }else {
+                double percentage = up.getPositionNetWorth()/totalNum *100;
+                up.setPositionPercent(decimalFormat.format(percentage) + "%");
+            }
+        }
         return getDataTable(list);
     }
 

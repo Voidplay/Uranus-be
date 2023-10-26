@@ -22,7 +22,7 @@
             <if test="positionName != null  and positionName != ''"> and position_name like concat('%', #{positionName}, '%')</if>
             <if test="positionNetWorth != null "> and position_net_worth = #{positionNetWorth}</if>
             <if test="positionLabel != null  and positionLabel != ''"> and position_label = #{positionLabel}</if>
-            <if test="positionPercent != null "> and position_percent = #{positionPercent}</if>
+            <if test="positionPercent != null  and positionPercent != ''"> and position_percent = #{positionPercent}</if>
         </where>
     </select>
 

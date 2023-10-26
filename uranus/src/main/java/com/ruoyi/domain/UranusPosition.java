@@ -32,7 +32,7 @@ public class UranusPosition extends BaseEntity
 
     /** 标的占总仓位百分比 */
     @Excel(name = "标的占总仓位百分比")
-    private Long positionPercent;
+    private String positionPercent;
 
     public void setPositionId(Long positionId)
     {
@@ -70,12 +70,12 @@ public class UranusPosition extends BaseEntity
     {
         return positionLabel;
     }
-    public void setPositionPercent(Long positionPercent)
+    public void setPositionPercent(String positionPercent)
     {
         this.positionPercent = positionPercent;
     }
 
-    public Long getPositionPercent()
+    public String getPositionPercent()
     {
         return positionPercent;
     }
