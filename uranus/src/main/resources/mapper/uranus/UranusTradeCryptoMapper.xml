@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectUranusTradeCryptoList" parameterType="UranusTradeCrypto" resultMap="UranusTradeCryptoResult">
         <include refid="selectUranusTradeCryptoVo"/>
-        <where>  
+        <where>
             <if test="coinName != null  and coinName != ''"> and coinName like concat('%', #{coinName}, '%')</if>
             <if test="tradeType != null  and tradeType != ''"> and trade_type = #{tradeType}</if>
             <if test="leverage != null "> and leverage = #{leverage}</if>

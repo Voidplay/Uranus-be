@@ -65,4 +65,6 @@ public interface IUranusTradeCryptoService
      * @return 结果
      */
     public String generateReviewId();
+
+    public UranusTradeCrypto cryptoClosePosition(UranusTradeCrypto uranusTradeCrypto);
 }

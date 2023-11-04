@@ -31,6 +31,11 @@
         where position_id = #{positionId}
     </select>
 
+    <select id="selectUranusPositionByName" parameterType="String" resultMap="UranusPositionResult">
+        <include refid="selectUranusPositionVo"/>
+        where position_name = #{positionName}
+    </select>
+
     <insert id="insertUranusPosition" parameterType="UranusPosition" useGeneratedKeys="true" keyProperty="positionId">
         insert into uranus_position
         <trim prefix="(" suffix=")" suffixOverrides=",">

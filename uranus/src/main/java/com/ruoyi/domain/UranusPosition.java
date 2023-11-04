@@ -1,5 +1,6 @@
 package com.ruoyi.domain;
 
+import java.math.BigDecimal;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -9,7 +10,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 持仓对象 uranus_position
  *
  * @author uranus
- * @date 2023-10-26
+ * @date 2023-11-04
  */
 public class UranusPosition extends BaseEntity
 {
@@ -24,7 +25,7 @@ public class UranusPosition extends BaseEntity
 
     /** 持仓净值 */
     @Excel(name = "持仓净值")
-    private Long positionNetWorth;
+    private BigDecimal positionNetWorth;
 
     /** 前端展示名称 */
     @Excel(name = "前端展示名称")
@@ -52,12 +53,12 @@ public class UranusPosition extends BaseEntity
     {
         return positionName;
     }
-    public void setPositionNetWorth(Long positionNetWorth)
+    public void setPositionNetWorth(BigDecimal positionNetWorth)
     {
         this.positionNetWorth = positionNetWorth;
     }
 
-    public Long getPositionNetWorth()
+    public BigDecimal getPositionNetWorth()
     {
         return positionNetWorth;
     }

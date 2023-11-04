@@ -20,6 +20,14 @@ public interface UranusPositionMapper
     public UranusPosition selectUranusPositionByPositionId(Long positionId);
 
     /**
+     * 查询持仓by name
+     *
+     * @param positionName 仓位名称
+     * @return 持仓
+     */
+    public UranusPosition selectUranusPositionByName(String positionName);
+
+    /**
      * 查询持仓列表
      * 
      * @param uranusPosition 持仓
