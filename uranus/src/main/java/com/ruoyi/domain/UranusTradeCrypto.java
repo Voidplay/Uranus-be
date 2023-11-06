@@ -12,7 +12,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 虚拟货币交易对象 uranus_trade_crypto
  *
  * @author uranus
- * @date 2023-10-28
+ * @date 2023-11-06
  */
 public class UranusTradeCrypto extends BaseEntity
 {
@@ -95,6 +95,10 @@ public class UranusTradeCrypto extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "挂单日期，精确到分供后续分析", width = 30, dateFormat = "yyyy-MM-dd")
     private Date orderDate;
+
+    /** 止损点，自动计算 */
+    @Excel(name = "止损点，自动计算")
+    private BigDecimal stopLossPrice;
 
     public void setTradeCryptoId(Long tradeCryptoId)
     {
@@ -267,6 +271,15 @@ public class UranusTradeCrypto extends BaseEntity
     {
         return orderDate;
     }
+    public void setStopLossPrice(BigDecimal stopLossPrice)
+    {
+        this.stopLossPrice = stopLossPrice;
+    }
+
+    public BigDecimal getStopLossPrice()
+    {
+        return stopLossPrice;
+    }
 
     @Override
     public String toString() {
@@ -290,6 +303,7 @@ public class UranusTradeCrypto extends BaseEntity
                 .append("reviewId", getReviewId())
                 .append("llimitPrice", getLlimitPrice())
                 .append("orderDate", getOrderDate())
+                .append("stopLossPrice", getStopLossPrice())
                 .toString();
     }
 }

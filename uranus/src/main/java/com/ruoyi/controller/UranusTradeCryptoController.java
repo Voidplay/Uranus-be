@@ -94,10 +94,14 @@ public class UranusTradeCryptoController extends BaseController {
     @Log(title = "虚拟货币交易", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody UranusTradeCrypto uranusTradeCrypto) {
-
+        //设置交易编号
         uranusTradeCrypto.setReviewId(uranusTradeCryptoService.generateReviewId());
+        //设置止损价位
+        uranusTradeCrypto.setStopLossPrice(uranusTradeCryptoService.generateStopLossPrice(uranusTradeCrypto));
 
-        return toAjax(uranusTradeCryptoService.insertUranusTradeCrypto(uranusTradeCrypto));
+        int rows = uranusTradeCryptoService.insertUranusTradeCrypto(uranusTradeCrypto);
+        return rows > 0 ? AjaxResult.success("新增成功，止损价格为"+   uranusTradeCrypto.getStopLossPrice()) : AjaxResult.error();
+
     }
 
     /**

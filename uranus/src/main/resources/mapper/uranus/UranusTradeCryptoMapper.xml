@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.mapper.UranusTradeCryptoMapper">
-    
+
     <resultMap type="UranusTradeCrypto" id="UranusTradeCryptoResult">
         <result property="tradeCryptoId"    column="trade_crypto_id"    />
         <result property="coinName"    column="coinName"    />
@@ -24,10 +24,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="reviewId"    column="reviewId"    />
         <result property="llimitPrice"    column="llimitPrice"    />
         <result property="orderDate"    column="order_date"    />
+        <result property="stopLossPrice"    column="stop_loss_price"    />
     </resultMap>
 
     <sql id="selectUranusTradeCryptoVo">
-        select trade_crypto_id, coinName, trade_type, leverage, margin, position, is_limitPrice, direction, entry_date, liquidate_date, entry_price, liquidate_price, fees, status, winorlose, balanceChanges, reviewId, llimitPrice, order_date from uranus_trade_crypto
+        select trade_crypto_id, coinName, trade_type, leverage, margin, position, is_limitPrice, direction, entry_date, liquidate_date, entry_price, liquidate_price, fees, status, winorlose, balanceChanges, reviewId, llimitPrice, order_date, stop_loss_price from uranus_trade_crypto
     </sql>
 
     <select id="selectUranusTradeCryptoList" parameterType="UranusTradeCrypto" resultMap="UranusTradeCryptoResult">
@@ -51,14 +52,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="reviewId != null  and reviewId != ''"> and reviewId = #{reviewId}</if>
             <if test="llimitPrice != null "> and llimitPrice = #{llimitPrice}</if>
             <if test="orderDate != null "> and order_date = #{orderDate}</if>
+            <if test="stopLossPrice != null "> and stop_loss_price = #{stopLossPrice}</if>
         </where>
     </select>
-    
+
     <select id="selectUranusTradeCryptoByTradeCryptoId" parameterType="Long" resultMap="UranusTradeCryptoResult">
         <include refid="selectUranusTradeCryptoVo"/>
         where trade_crypto_id = #{tradeCryptoId}
     </select>
-        
+
     <insert id="insertUranusTradeCrypto" parameterType="UranusTradeCrypto" useGeneratedKeys="true" keyProperty="tradeCryptoId">
         insert into uranus_trade_crypto
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -80,7 +82,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="reviewId != null">reviewId,</if>
             <if test="llimitPrice != null">llimitPrice,</if>
             <if test="orderDate != null">order_date,</if>
-         </trim>
+            <if test="stopLossPrice != null">stop_loss_price,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="coinName != null and coinName != ''">#{coinName},</if>
             <if test="tradeType != null and tradeType != ''">#{tradeType},</if>
@@ -100,7 +103,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="reviewId != null">#{reviewId},</if>
             <if test="llimitPrice != null">#{llimitPrice},</if>
             <if test="orderDate != null">#{orderDate},</if>
-         </trim>
+            <if test="stopLossPrice != null">#{stopLossPrice},</if>
+        </trim>
     </insert>
 
     <update id="updateUranusTradeCrypto" parameterType="UranusTradeCrypto">
@@ -124,6 +128,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="reviewId != null">reviewId = #{reviewId},</if>
             <if test="llimitPrice != null">llimitPrice = #{llimitPrice},</if>
             <if test="orderDate != null">order_date = #{orderDate},</if>
+            <if test="stopLossPrice != null">stop_loss_price = #{stopLossPrice},</if>
         </trim>
         where trade_crypto_id = #{tradeCryptoId}
     </update>
@@ -133,7 +138,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteUranusTradeCryptoByTradeCryptoIds" parameterType="String">
-        delete from uranus_trade_crypto where trade_crypto_id in 
+        delete from uranus_trade_crypto where trade_crypto_id in
         <foreach item="tradeCryptoId" collection="array" open="(" separator="," close=")">
             #{tradeCryptoId}
         </foreach>

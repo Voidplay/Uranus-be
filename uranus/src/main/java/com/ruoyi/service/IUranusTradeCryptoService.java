@@ -1,5 +1,6 @@
 package com.ruoyi.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import com.ruoyi.domain.UranusTradeCrypto;
 
@@ -67,4 +68,5 @@ public interface IUranusTradeCryptoService
     public String generateReviewId();
 
     public UranusTradeCrypto cryptoClosePosition(UranusTradeCrypto uranusTradeCrypto);
+    public BigDecimal generateStopLossPrice(UranusTradeCrypto uranusTradeCrypto);
 }
