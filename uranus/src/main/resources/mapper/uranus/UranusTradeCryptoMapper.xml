@@ -56,6 +56,32 @@
         </where>
     </select>
 
+    <select id="selectUranusTradeCryptoOpenList" parameterType="UranusTradeCrypto" resultMap="UranusTradeCryptoResult">
+        <include refid="selectUranusTradeCryptoVo"/>
+        where status != 'closePosition'
+        <where>
+            <if test="coinName != null  and coinName != ''"> and coinName like concat('%', #{coinName}, '%')</if>
+            <if test="tradeType != null  and tradeType != ''"> and trade_type = #{tradeType}</if>
+            <if test="leverage != null "> and leverage = #{leverage}</if>
+            <if test="margin != null "> and margin = #{margin}</if>
+            <if test="position != null "> and position = #{position}</if>
+            <if test="isLimitprice != null  and isLimitprice != ''"> and is_limitPrice = #{isLimitprice}</if>
+            <if test="direction != null  and direction != ''"> and direction = #{direction}</if>
+            <if test="entryDate != null "> and entry_date = #{entryDate}</if>
+            <if test="liquidateDate != null "> and liquidate_date = #{liquidateDate}</if>
+            <if test="entryPrice != null "> and entry_price = #{entryPrice}</if>
+            <if test="liquidatePrice != null "> and liquidate_price = #{liquidatePrice}</if>
+            <if test="fees != null "> and fees = #{fees}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="winorlose != null  and winorlose != ''"> and winorlose = #{winorlose}</if>
+            <if test="balanceChanges != null "> and balanceChanges = #{balanceChanges}</if>
+            <if test="reviewId != null  and reviewId != ''"> and reviewId = #{reviewId}</if>
+            <if test="llimitPrice != null "> and llimitPrice = #{llimitPrice}</if>
+            <if test="orderDate != null "> and order_date = #{orderDate}</if>
+            <if test="stopLossPrice != null "> and stop_loss_price = #{stopLossPrice}</if>
+        </where>
+    </select>
+
     <select id="selectUranusTradeCryptoByTradeCryptoId" parameterType="Long" resultMap="UranusTradeCryptoResult">
         <include refid="selectUranusTradeCryptoVo"/>
         where trade_crypto_id = #{tradeCryptoId}

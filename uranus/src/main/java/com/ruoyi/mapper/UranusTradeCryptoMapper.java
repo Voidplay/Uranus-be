@@ -26,6 +26,14 @@ public interface UranusTradeCryptoMapper
      * @return 虚拟货币交易集合
      */
     public List<UranusTradeCrypto> selectUranusTradeCryptoList(UranusTradeCrypto uranusTradeCrypto);
+    /**
+     * 查询虚拟货币交易列表- 开仓及持仓状态
+     *
+     * @param uranusTradeCrypto 虚拟货币交易
+     * @return 虚拟货币交易集合
+     */
+    public List<UranusTradeCrypto> selectUranusTradeCryptoOpenList(UranusTradeCrypto uranusTradeCrypto);
+
 
     /**
      * 新增虚拟货币交易

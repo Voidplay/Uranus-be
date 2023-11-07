@@ -49,6 +49,10 @@ public class UranusTradeCryptoServiceImpl implements IUranusTradeCryptoService {
     public List<UranusTradeCrypto> selectUranusTradeCryptoList(UranusTradeCrypto uranusTradeCrypto) {
         return uranusTradeCryptoMapper.selectUranusTradeCryptoList(uranusTradeCrypto);
     }
+    @Override
+    public List<UranusTradeCrypto> selectUranusTradeCryptoOpenList(UranusTradeCrypto uranusTradeCrypto){
+        return uranusTradeCryptoMapper.selectUranusTradeCryptoOpenList(uranusTradeCrypto);
+    };
 
     /**
      * 新增虚拟货币交易

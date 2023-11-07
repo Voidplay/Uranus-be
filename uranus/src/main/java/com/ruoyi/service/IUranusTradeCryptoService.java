@@ -69,4 +69,6 @@ public interface IUranusTradeCryptoService
 
     public UranusTradeCrypto cryptoClosePosition(UranusTradeCrypto uranusTradeCrypto);
     public BigDecimal generateStopLossPrice(UranusTradeCrypto uranusTradeCrypto);
+
+    List<UranusTradeCrypto> selectUranusTradeCryptoOpenList(UranusTradeCrypto uranusTradeCrypto);
 }

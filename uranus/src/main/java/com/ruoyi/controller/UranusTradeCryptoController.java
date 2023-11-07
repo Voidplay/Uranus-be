@@ -32,7 +32,7 @@ public class UranusTradeCryptoController extends BaseController {
     @GetMapping("/list")
     public TableDataInfo list(UranusTradeCrypto uranusTradeCrypto) {
         startPage();
-        List<UranusTradeCrypto> list = uranusTradeCryptoService.selectUranusTradeCryptoList(uranusTradeCrypto);
+        List<UranusTradeCrypto> list = uranusTradeCryptoService.selectUranusTradeCryptoOpenList(uranusTradeCrypto);
         for (int i = list.size() - 1; i >= 0; i--) {
             if (list.get(i).getDirection().equals("long")) {
                 list.get(i).setDirection("做多");
@@ -43,8 +43,6 @@ public class UranusTradeCryptoController extends BaseController {
                 list.get(i).setStatus("挂单待成交");
             } else if (list.get(i).getStatus().equals("openPosition")) {
                 list.get(i).setStatus("持仓中");
-            } else if (list.get(i).getStatus().equals("closePosition")) {
-                list.remove(i);
             }
         }
         return getDataTable(list);
@@ -100,7 +98,7 @@ public class UranusTradeCryptoController extends BaseController {
         uranusTradeCrypto.setStopLossPrice(uranusTradeCryptoService.generateStopLossPrice(uranusTradeCrypto));
 
         int rows = uranusTradeCryptoService.insertUranusTradeCrypto(uranusTradeCrypto);
-        return rows > 0 ? AjaxResult.success("新增成功，止损价格为"+   uranusTradeCrypto.getStopLossPrice()) : AjaxResult.error();
+        return rows > 0 ? AjaxResult.success("新增成功，止损价格为",uranusTradeCrypto.getStopLossPrice()) : AjaxResult.error();
 
     }
 
