@@ -1,5 +1,8 @@
 package com.ruoyi.service.impl;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,5 +92,29 @@ public class UranusPositionServiceImpl implements IUranusPositionService
     public int deleteUranusPositionByPositionId(Long positionId)
     {
         return uranusPositionMapper.deleteUranusPositionByPositionId(positionId);
+    }
+
+    @Override
+    public List<UranusPosition> getUranusPositionPercent(List<UranusPosition> list) {
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        BigDecimal totalNum = BigDecimal.valueOf(1);
+        for (UranusPosition position : list) {
+            if (position.getPositionName().equals("total")) {
+                totalNum = position.getPositionNetWorth();
+            }
+        }
+        for (UranusPosition up : list) {
+            if (up.getPositionName().equals("total")) {
+                up.setPositionPercent("100%");
+            } else {
+                BigDecimal percentage = up.getPositionNetWorth().divide(totalNum, 2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+                up.setPositionPercent(decimalFormat.format(percentage) + "%");
+            }
+        }
+        return list;
+    }
+    @Override
+    public List<UranusPosition> getUranusRunningPercent(List<UranusPosition> list){
+        return list;
     }
 }

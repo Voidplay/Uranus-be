@@ -58,4 +58,8 @@ public interface IUranusPositionService
      * @return 结果
      */
     public int deleteUranusPositionByPositionId(Long positionId);
+
+    public List<UranusPosition> getUranusPositionPercent(List<UranusPosition> list);
+
+    public List<UranusPosition> getUranusRunningPercent(List<UranusPosition> list);
 }

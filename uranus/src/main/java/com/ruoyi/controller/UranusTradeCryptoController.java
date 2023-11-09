@@ -98,7 +98,7 @@ public class UranusTradeCryptoController extends BaseController {
         uranusTradeCrypto.setStopLossPrice(uranusTradeCryptoService.generateStopLossPrice(uranusTradeCrypto));
 
         int rows = uranusTradeCryptoService.insertUranusTradeCrypto(uranusTradeCrypto);
-        return rows > 0 ? AjaxResult.success("新增成功，止损价格为",uranusTradeCrypto.getStopLossPrice()) : AjaxResult.error();
+        return rows > 0 ? AjaxResult.success("新增成功，止损价格为" + uranusTradeCrypto.getStopLossPrice()) : AjaxResult.error();
 
     }
 

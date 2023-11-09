@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -39,20 +37,7 @@ public class UranusPositionController extends BaseController
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
         startPage();
         List<UranusPosition> list = uranusPositionService.selectUranusPositionList(uranusPosition);
-        BigDecimal totalNum = BigDecimal.valueOf(1);
-        for (UranusPosition position : list) {
-            if (position.getPositionName().equals("total")) {
-                totalNum = position.getPositionNetWorth();
-            }
-        }
-        for (UranusPosition up:list) {
-            if (up.getPositionName().equals("total")){
-                up.setPositionPercent("100%");
-            }else {
-                BigDecimal percentage = up.getPositionNetWorth().divide(totalNum,2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
-                up.setPositionPercent(decimalFormat.format(percentage) + "%");
-            }
-        }
+        list = uranusPositionService.getUranusPositionPercent(list);
         return getDataTable(list);
     }
 
