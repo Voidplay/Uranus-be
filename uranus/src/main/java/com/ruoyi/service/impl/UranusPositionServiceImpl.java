@@ -4,6 +4,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Objects;
+
+import com.ruoyi.domain.UranusTradeCrypto;
+import com.ruoyi.mapper.UranusTradeCryptoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.mapper.UranusPositionMapper;
@@ -21,6 +25,8 @@ public class UranusPositionServiceImpl implements IUranusPositionService
 {
     @Autowired
     private UranusPositionMapper uranusPositionMapper;
+    @Autowired
+    private UranusTradeCryptoMapper uranusTradeCryptoMapper;
 
     /**
      * 查询持仓
@@ -115,6 +121,48 @@ public class UranusPositionServiceImpl implements IUranusPositionService
     }
     @Override
     public List<UranusPosition> getUranusRunningPercent(List<UranusPosition> list){
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        BigDecimal moneyCount = null;
+        BigDecimal totalCount = BigDecimal.valueOf(0);
+        for (UranusPosition up: list) {
+            moneyCount = BigDecimal.valueOf(0);
+            //以crypto为例，获取crypto标的类型下所有挂单及持仓中的总金额
+            if (up.getPositionName().equals("crypto")){
+                UranusTradeCrypto uranusTradeCrypto = new UranusTradeCrypto();
+                List<UranusTradeCrypto> cryptoOpenList = uranusTradeCryptoMapper.selectUranusTradeCryptoOpenList(uranusTradeCrypto);
+                for (UranusTradeCrypto openTrade : cryptoOpenList) {
+                    moneyCount = moneyCount.add(openTrade.getPosition());
+                }
+                up.setRunningCount(moneyCount);
+                up.setRunningPercent(decimalFormat.format(moneyCount.divide(up.getPositionNetWorth(),2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)))+'%');
+                if (up.getRunningCount() == null){
+                    up.setRunningCount(BigDecimal.valueOf(0));
+                    up.setRunningPercent("0%");
+                }
+            }
+        }
+        //计算所有标的持仓中的数据和占比
+        for (UranusPosition up1:list) {
+            if (!Objects.equals(up1.getPositionName(), "total")){
+                if (up1.getRunningCount() == null ||BigDecimal.ZERO.compareTo(up1.getRunningCount())==0 ){
+                    totalCount = totalCount.add(BigDecimal.valueOf(0));
+                } else {
+                    totalCount = totalCount.add(up1.getRunningCount());
+                }
+            }
+        }
+        String totalPercent = decimalFormat.format(totalCount.divide(uranusPositionMapper.selectUranusPositionByName("total").getPositionNetWorth(),2,RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100))) +'%';
+        for (UranusPosition up2:list) {
+            if (up2.getPositionName().equals("total")){
+                up2.setRunningPercent(totalPercent);
+                up2.setRunningCount(totalCount);
+            }
+        }
         return list;
+    }
+
+    @Override
+    public UranusPosition getUranusRunningPercentByName(UranusPosition uranusPosition){
+        return uranusPosition;
     }
 }

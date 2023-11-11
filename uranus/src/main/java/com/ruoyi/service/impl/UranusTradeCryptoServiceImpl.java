@@ -141,7 +141,7 @@ public class UranusTradeCryptoServiceImpl implements IUranusTradeCryptoService {
         BigDecimal lose_percet = max_lose_num.divide(position,3, RoundingMode.HALF_UP);
         BigDecimal stop_price = null;
         if (lose_percet.compareTo(BigDecimal.valueOf(1)) > 0) {
-            return null;
+            return BigDecimal.valueOf(0);
         }
         if (direction.equals("long")){
             stop_price = entryprice.subtract(entryprice.multiply(lose_percet));
@@ -175,5 +175,20 @@ public class UranusTradeCryptoServiceImpl implements IUranusTradeCryptoService {
             uranusPositionMapper.updateUranusPosition(totalPosition);
         }
         return uranusTradeCrypto;
+    }
+    //生成返回给前端的信息、注意事项
+    @Override
+    public String generateReturnMsg(UranusTradeCrypto uranusTradeCrypto){
+        String msg;
+        //生成String类型止损信息
+        String checkIsFull ="检查是否为逐仓，严禁全仓交易";
+        String stopLossPrice;
+        if (BigDecimal.ZERO.compareTo(uranusTradeCrypto.getStopLossPrice())==0){
+            stopLossPrice = "持仓金额较低，可不设止损";
+        } else {
+            stopLossPrice = "止损价格为" + uranusTradeCrypto.getStopLossPrice();
+        }
+        msg ="新增成功,"+stopLossPrice+"," +checkIsFull;
+        return msg;
     }
 }

@@ -10,7 +10,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 持仓对象 uranus_position
  *
  * @author uranus
- * @date 2023-11-04
+ * @date 2023-11-10
  */
 public class UranusPosition extends BaseEntity
 {
@@ -34,6 +34,14 @@ public class UranusPosition extends BaseEntity
     /** 标的占总仓位百分比 */
     @Excel(name = "标的占总仓位百分比")
     private String positionPercent;
+
+    /** 持仓百分比 */
+    @Excel(name = "持仓百分比")
+    private String runningPercent;
+
+    /**  持仓金额 */
+    @Excel(name = " 持仓金额")
+    private BigDecimal runningCount;
 
     public void setPositionId(Long positionId)
     {
@@ -80,6 +88,24 @@ public class UranusPosition extends BaseEntity
     {
         return positionPercent;
     }
+    public void setRunningPercent(String runningPercent)
+    {
+        this.runningPercent = runningPercent;
+    }
+
+    public String getRunningPercent()
+    {
+        return runningPercent;
+    }
+    public void setRunningCount(BigDecimal runningCount)
+    {
+        this.runningCount = runningCount;
+    }
+
+    public BigDecimal getRunningCount()
+    {
+        return runningCount;
+    }
 
     @Override
     public String toString() {
@@ -89,6 +115,8 @@ public class UranusPosition extends BaseEntity
                 .append("positionNetWorth", getPositionNetWorth())
                 .append("positionLabel", getPositionLabel())
                 .append("positionPercent", getPositionPercent())
+                .append("runningPercent", getRunningPercent())
+                .append("runningCount", getRunningCount())
                 .toString();
     }
 }

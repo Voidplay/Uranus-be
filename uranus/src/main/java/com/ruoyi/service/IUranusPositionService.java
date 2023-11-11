@@ -62,4 +62,6 @@ public interface IUranusPositionService
     public List<UranusPosition> getUranusPositionPercent(List<UranusPosition> list);
 
     public List<UranusPosition> getUranusRunningPercent(List<UranusPosition> list);
+
+    public UranusPosition getUranusRunningPercentByName(UranusPosition uranusPosition);
 }

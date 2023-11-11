@@ -38,6 +38,7 @@ public class UranusPositionController extends BaseController
         startPage();
         List<UranusPosition> list = uranusPositionService.selectUranusPositionList(uranusPosition);
         list = uranusPositionService.getUranusPositionPercent(list);
+        list = uranusPositionService.getUranusRunningPercent(list);
         return getDataTable(list);
     }
 
