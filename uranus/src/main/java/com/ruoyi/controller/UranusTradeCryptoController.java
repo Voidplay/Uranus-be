@@ -7,7 +7,9 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.domain.UranusTradeCrypto;
+import com.ruoyi.domain.UranusTradeHistory;
 import com.ruoyi.service.IUranusTradeCryptoService;
+import com.ruoyi.service.IUranusTradeHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +27,8 @@ import java.util.List;
 public class UranusTradeCryptoController extends BaseController {
     @Autowired
     private IUranusTradeCryptoService uranusTradeCryptoService;
+    @Autowired
+    private IUranusTradeHistoryService uranusTradeHistoryService;
 
     /**
      * 查询虚拟货币持仓列表，status状态不为已平仓
@@ -112,9 +116,27 @@ public class UranusTradeCryptoController extends BaseController {
         if (uranusTradeCrypto.getStatus().equals("openPosition") && uranusTradeCrypto.getEntryPrice() == null) {
             return AjaxResult.warn("操作失败,持仓状态下需填写入场价格");
         }if (uranusTradeCrypto.getStatus().equals("closePosition")){
+            if (uranusTradeCrypto.getEntryPrice() == null){
+                return AjaxResult.warn("操作失败,平仓前请先填写入场价格");
+            } else if (uranusTradeCrypto.getEntryDate() == null) {
+                return AjaxResult.warn("操作失败,平仓前请先填写入场时间");
+            }
             uranusTradeCrypto = uranusTradeCryptoService.cryptoClosePosition(uranusTradeCrypto);
         }
-        return toAjax(uranusTradeCryptoService.updateUranusTradeCrypto(uranusTradeCrypto));
+
+        int rows = uranusTradeCryptoService.updateUranusTradeCrypto(uranusTradeCrypto);
+        //平仓时插入交易历史表
+        if (rows > 0 && uranusTradeCrypto.getStatus().equals("closePosition")){
+            UranusTradeHistory uranusTradeHistory = new UranusTradeHistory();
+            uranusTradeHistory.setTradeSubjectName("crypto");
+            uranusTradeHistory.setTradeReviewid(uranusTradeCrypto.getReviewId());
+            uranusTradeHistory.setTradeWinorlose(uranusTradeCrypto.getWinorlose());
+            uranusTradeHistory.setEntryDate(uranusTradeCrypto.getEntryDate());
+            uranusTradeHistory.setLiquidateTime(uranusTradeCrypto.getLiquidateDate());
+            uranusTradeHistory.setBalanceChanges(uranusTradeCrypto.getBalanceChanges());
+            uranusTradeHistoryService.insertUranusTradeHistory(uranusTradeHistory);
+        }
+        return toAjax(rows);
     }
 
     /**
