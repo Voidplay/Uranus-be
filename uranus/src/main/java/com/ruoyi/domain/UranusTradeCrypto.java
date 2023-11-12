@@ -50,13 +50,13 @@ public class UranusTradeCrypto extends BaseEntity
     private String direction;
 
     /** 入场日期 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "入场日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "入场日期", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date entryDate;
 
     /** 平仓日期 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "平仓日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "平仓日期", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date liquidateDate;
 
     /** 入场价格 */
@@ -92,8 +92,8 @@ public class UranusTradeCrypto extends BaseEntity
     private BigDecimal llimitPrice;
 
     /** 挂单日期，精确到分供后续分析 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "挂单日期，精确到分供后续分析", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "挂单日期，精确到分供后续分析", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date orderDate;
 
     /** 止损点，自动计算 */
