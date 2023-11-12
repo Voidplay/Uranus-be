@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.UranusTradeCryptoMapper">
+
+    <resultMap type="UranusTradeCrypto" id="UranusTradeCryptoResult">
+        <result property="tradeCryptoId"    column="trade_crypto_id"    />
+        <result property="coinName"    column="coinName"    />
+        <result property="tradeType"    column="trade_type"    />
+        <result property="leverage"    column="leverage"    />
+        <result property="margin"    column="margin"    />
+        <result property="position"    column="position"    />
+        <result property="isLimitprice"    column="is_limitPrice"    />
+        <result property="direction"    column="direction"    />
+        <result property="entryDate"    column="entry_date"    />
+        <result property="liquidateDate"    column="liquidate_date"    />
+        <result property="entryPrice"    column="entry_price"    />
+        <result property="liquidatePrice"    column="liquidate_price"    />
+        <result property="fees"    column="fees"    />
+        <result property="status"    column="status"    />
+        <result property="winorlose"    column="winorlose"    />
+        <result property="balanceChanges"    column="balanceChanges"    />
+        <result property="reviewId"    column="reviewId"    />
+        <result property="llimitPrice"    column="llimitPrice"    />
+        <result property="orderDate"    column="order_date"    />
+        <result property="stopLossPrice"    column="stop_loss_price"    />
+    </resultMap>
+
+    <sql id="selectUranusTradeCryptoVo">
+        select trade_crypto_id, coinName, trade_type, leverage, margin, position, is_limitPrice, direction, entry_date, liquidate_date, entry_price, liquidate_price, fees, status, winorlose, balanceChanges, reviewId, llimitPrice, order_date, stop_loss_price from uranus_trade_crypto
+    </sql>
+
+    <select id="selectUranusTradeCryptoList" parameterType="UranusTradeCrypto" resultMap="UranusTradeCryptoResult">
+        <include refid="selectUranusTradeCryptoVo"/>
+        <where>
+            <if test="coinName != null  and coinName != ''"> and coinName like concat('%', #{coinName}, '%')</if>
+            <if test="tradeType != null  and tradeType != ''"> and trade_type = #{tradeType}</if>
+            <if test="leverage != null "> and leverage = #{leverage}</if>
+            <if test="margin != null "> and margin = #{margin}</if>
+            <if test="position != null "> and position = #{position}</if>
+            <if test="isLimitprice != null  and isLimitprice != ''"> and is_limitPrice = #{isLimitprice}</if>
+            <if test="direction != null  and direction != ''"> and direction = #{direction}</if>
+            <if test="entryDate != null "> and entry_date = #{entryDate}</if>
+            <if test="liquidateDate != null "> and liquidate_date = #{liquidateDate}</if>
+            <if test="entryPrice != null "> and entry_price = #{entryPrice}</if>
+            <if test="liquidatePrice != null "> and liquidate_price = #{liquidatePrice}</if>
+            <if test="fees != null "> and fees = #{fees}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="winorlose != null  and winorlose != ''"> and winorlose = #{winorlose}</if>
+            <if test="balanceChanges != null "> and balanceChanges = #{balanceChanges}</if>
+            <if test="reviewId != null  and reviewId != ''"> and reviewId = #{reviewId}</if>
+            <if test="llimitPrice != null "> and llimitPrice = #{llimitPrice}</if>
+            <if test="orderDate != null "> and order_date = #{orderDate}</if>
+            <if test="stopLossPrice != null "> and stop_loss_price = #{stopLossPrice}</if>
+        </where>
+    </select>
+
+    <select id="selectUranusTradeCryptoOpenList" parameterType="UranusTradeCrypto" resultMap="UranusTradeCryptoResult">
+        <include refid="selectUranusTradeCryptoVo"/>
+        where status != 'closePosition'
+        <where>
+            <if test="coinName != null  and coinName != ''"> and coinName like concat('%', #{coinName}, '%')</if>
+            <if test="tradeType != null  and tradeType != ''"> and trade_type = #{tradeType}</if>
+            <if test="leverage != null "> and leverage = #{leverage}</if>
+            <if test="margin != null "> and margin = #{margin}</if>
+            <if test="position != null "> and position = #{position}</if>
+            <if test="isLimitprice != null  and isLimitprice != ''"> and is_limitPrice = #{isLimitprice}</if>
+            <if test="direction != null  and direction != ''"> and direction = #{direction}</if>
+            <if test="entryDate != null "> and entry_date = #{entryDate}</if>
+            <if test="liquidateDate != null "> and liquidate_date = #{liquidateDate}</if>
+            <if test="entryPrice != null "> and entry_price = #{entryPrice}</if>
+            <if test="liquidatePrice != null "> and liquidate_price = #{liquidatePrice}</if>
+            <if test="fees != null "> and fees = #{fees}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="winorlose != null  and winorlose != ''"> and winorlose = #{winorlose}</if>
+            <if test="balanceChanges != null "> and balanceChanges = #{balanceChanges}</if>
+            <if test="reviewId != null  and reviewId != ''"> and reviewId = #{reviewId}</if>
+            <if test="llimitPrice != null "> and llimitPrice = #{llimitPrice}</if>
+            <if test="orderDate != null "> and order_date = #{orderDate}</if>
+            <if test="stopLossPrice != null "> and stop_loss_price = #{stopLossPrice}</if>
+        </where>
+    </select>
+
+    <select id="selectUranusTradeCryptoByTradeCryptoId" parameterType="Long" resultMap="UranusTradeCryptoResult">
+        <include refid="selectUranusTradeCryptoVo"/>
+        where trade_crypto_id = #{tradeCryptoId}
+    </select>
+
+    <insert id="insertUranusTradeCrypto" parameterType="UranusTradeCrypto" useGeneratedKeys="true" keyProperty="tradeCryptoId">
+        insert into uranus_trade_crypto
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="coinName != null and coinName != ''">coinName,</if>
+            <if test="tradeType != null and tradeType != ''">trade_type,</if>
+            <if test="leverage != null">leverage,</if>
+            <if test="margin != null">margin,</if>
+            <if test="position != null">position,</if>
+            <if test="isLimitprice != null and isLimitprice != ''">is_limitPrice,</if>
+            <if test="direction != null and direction != ''">direction,</if>
+            <if test="entryDate != null">entry_date,</if>
+            <if test="liquidateDate != null">liquidate_date,</if>
+            <if test="entryPrice != null">entry_price,</if>
+            <if test="liquidatePrice != null">liquidate_price,</if>
+            <if test="fees != null">fees,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="winorlose != null">winorlose,</if>
+            <if test="balanceChanges != null">balanceChanges,</if>
+            <if test="reviewId != null">reviewId,</if>
+            <if test="llimitPrice != null">llimitPrice,</if>
+            <if test="orderDate != null">order_date,</if>
+            <if test="stopLossPrice != null">stop_loss_price,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="coinName != null and coinName != ''">#{coinName},</if>
+            <if test="tradeType != null and tradeType != ''">#{tradeType},</if>
+            <if test="leverage != null">#{leverage},</if>
+            <if test="margin != null">#{margin},</if>
+            <if test="position != null">#{position},</if>
+            <if test="isLimitprice != null and isLimitprice != ''">#{isLimitprice},</if>
+            <if test="direction != null and direction != ''">#{direction},</if>
+            <if test="entryDate != null">#{entryDate},</if>
+            <if test="liquidateDate != null">#{liquidateDate},</if>
+            <if test="entryPrice != null">#{entryPrice},</if>
+            <if test="liquidatePrice != null">#{liquidatePrice},</if>
+            <if test="fees != null">#{fees},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="winorlose != null">#{winorlose},</if>
+            <if test="balanceChanges != null">#{balanceChanges},</if>
+            <if test="reviewId != null">#{reviewId},</if>
+            <if test="llimitPrice != null">#{llimitPrice},</if>
+            <if test="orderDate != null">#{orderDate},</if>
+            <if test="stopLossPrice != null">#{stopLossPrice},</if>
+        </trim>
+    </insert>
+
+    <update id="updateUranusTradeCrypto" parameterType="UranusTradeCrypto">
+        update uranus_trade_crypto
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="coinName != null and coinName != ''">coinName = #{coinName},</if>
+            <if test="tradeType != null and tradeType != ''">trade_type = #{tradeType},</if>
+            <if test="leverage != null">leverage = #{leverage},</if>
+            <if test="margin != null">margin = #{margin},</if>
+            <if test="position != null">position = #{position},</if>
+            <if test="isLimitprice != null and isLimitprice != ''">is_limitPrice = #{isLimitprice},</if>
+            <if test="direction != null and direction != ''">direction = #{direction},</if>
+            <if test="entryDate != null">entry_date = #{entryDate},</if>
+            <if test="liquidateDate != null">liquidate_date = #{liquidateDate},</if>
+            <if test="entryPrice != null">entry_price = #{entryPrice},</if>
+            <if test="liquidatePrice != null">liquidate_price = #{liquidatePrice},</if>
+            <if test="fees != null">fees = #{fees},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="winorlose != null">winorlose = #{winorlose},</if>
+            <if test="balanceChanges != null">balanceChanges = #{balanceChanges},</if>
+            <if test="reviewId != null">reviewId = #{reviewId},</if>
+            <if test="llimitPrice != null">llimitPrice = #{llimitPrice},</if>
+            <if test="orderDate != null">order_date = #{orderDate},</if>
+            <if test="stopLossPrice != null">stop_loss_price = #{stopLossPrice},</if>
+        </trim>
+        where trade_crypto_id = #{tradeCryptoId}
+    </update>
+
+    <delete id="deleteUranusTradeCryptoByTradeCryptoId" parameterType="Long">
+        delete from uranus_trade_crypto where trade_crypto_id = #{tradeCryptoId}
+    </delete>
+
+    <delete id="deleteUranusTradeCryptoByTradeCryptoIds" parameterType="String">
+        delete from uranus_trade_crypto where trade_crypto_id in
+        <foreach item="tradeCryptoId" collection="array" open="(" separator="," close=")">
+            #{tradeCryptoId}
+        </foreach>
+    </delete>
+</mapper>

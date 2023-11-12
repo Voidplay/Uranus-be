@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.UranusTradeHistoryMapper">
+
+    <resultMap type="UranusTradeHistory" id="UranusTradeHistoryResult">
+        <result property="tradeHistoryId"    column="trade_history_id"    />
+        <result property="tradeSubjectName"    column="trade_subject_name"    />
+        <result property="tradeReviewid"    column="trade_reviewId"    />
+        <result property="tradeWinorlose"    column="trade_winorlose"    />
+        <result property="entryDate"    column="entry_date"    />
+        <result property="liquidateTime"    column="liquidate_time"    />
+        <result property="balanceChanges"    column="balanceChanges"    />
+    </resultMap>
+
+    <sql id="selectUranusTradeHistoryVo">
+        select trade_history_id, trade_subject_name, trade_reviewId, trade_winorlose, entry_date, liquidate_time, balanceChanges from uranus_trade_history
+    </sql>
+
+    <select id="selectUranusTradeHistoryList" parameterType="UranusTradeHistory" resultMap="UranusTradeHistoryResult">
+        <include refid="selectUranusTradeHistoryVo"/>
+        <where>
+            <if test="tradeSubjectName != null  and tradeSubjectName != ''"> and trade_subject_name like concat('%', #{tradeSubjectName}, '%')</if>
+            <if test="tradeReviewid != null  and tradeReviewid != ''"> and trade_reviewId = #{tradeReviewid}</if>
+            <if test="tradeWinorlose != null  and tradeWinorlose != ''"> and trade_winorlose = #{tradeWinorlose}</if>
+            <if test="entryDate != null "> and entry_date = #{entryDate}</if>
+            <if test="liquidateTime != null "> and liquidate_time = #{liquidateTime}</if>
+            <if test="balanceChanges != null "> and balanceChanges = #{balanceChanges}</if>
+        </where>
+    </select>
+
+    <select id="selectUranusTradeHistoryByTradeHistoryId" parameterType="Long" resultMap="UranusTradeHistoryResult">
+        <include refid="selectUranusTradeHistoryVo"/>
+        where trade_history_id = #{tradeHistoryId}
+    </select>
+
+    <insert id="insertUranusTradeHistory" parameterType="UranusTradeHistory" useGeneratedKeys="true" keyProperty="tradeHistoryId">
+        insert into uranus_trade_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tradeSubjectName != null">trade_subject_name,</if>
+            <if test="tradeReviewid != null and tradeReviewid != ''">trade_reviewId,</if>
+            <if test="tradeWinorlose != null">trade_winorlose,</if>
+            <if test="entryDate != null">entry_date,</if>
+            <if test="liquidateTime != null">liquidate_time,</if>
+            <if test="balanceChanges != null">balanceChanges,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tradeSubjectName != null">#{tradeSubjectName},</if>
+            <if test="tradeReviewid != null and tradeReviewid != ''">#{tradeReviewid},</if>
+            <if test="tradeWinorlose != null">#{tradeWinorlose},</if>
+            <if test="entryDate != null">#{entryDate},</if>
+            <if test="liquidateTime != null">#{liquidateTime},</if>
+            <if test="balanceChanges != null">#{balanceChanges},</if>
+        </trim>
+    </insert>
+
+    <update id="updateUranusTradeHistory" parameterType="UranusTradeHistory">
+        update uranus_trade_history
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tradeSubjectName != null">trade_subject_name = #{tradeSubjectName},</if>
+            <if test="tradeReviewid != null and tradeReviewid != ''">trade_reviewId = #{tradeReviewid},</if>
+            <if test="tradeWinorlose != null">trade_winorlose = #{tradeWinorlose},</if>
+            <if test="entryDate != null">entry_date = #{entryDate},</if>
+            <if test="liquidateTime != null">liquidate_time = #{liquidateTime},</if>
+            <if test="balanceChanges != null">balanceChanges = #{balanceChanges},</if>
+        </trim>
+        where trade_history_id = #{tradeHistoryId}
+    </update>
+
+    <delete id="deleteUranusTradeHistoryByTradeHistoryId" parameterType="Long">
+        delete from uranus_trade_history where trade_history_id = #{tradeHistoryId}
+    </delete>
+
+    <delete id="deleteUranusTradeHistoryByTradeHistoryIds" parameterType="String">
+        delete from uranus_trade_history where trade_history_id in
+        <foreach item="tradeHistoryId" collection="array" open="(" separator="," close=")">
+            #{tradeHistoryId}
+        </foreach>
+    </delete>
+</mapper>
