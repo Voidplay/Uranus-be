@@ -112,6 +112,8 @@ public class UranusPositionServiceImpl implements IUranusPositionService
         for (UranusPosition up : list) {
             if (up.getPositionName().equals("total")) {
                 up.setPositionPercent("100%");
+            } else if (BigDecimal.ZERO.compareTo(up.getPositionNetWorth())==0) {
+                up.setPositionPercent("0%");
             } else {
                 BigDecimal percentage = up.getPositionNetWorth().divide(totalNum, 2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
                 up.setPositionPercent(decimalFormat.format(percentage) + "%");
@@ -122,7 +124,7 @@ public class UranusPositionServiceImpl implements IUranusPositionService
     @Override
     public List<UranusPosition> getUranusRunningPercent(List<UranusPosition> list){
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
-        BigDecimal moneyCount = null;
+        BigDecimal moneyCount;
         BigDecimal totalCount = BigDecimal.valueOf(0);
         for (UranusPosition up: list) {
             moneyCount = BigDecimal.valueOf(0);
@@ -133,11 +135,12 @@ public class UranusPositionServiceImpl implements IUranusPositionService
                 for (UranusTradeCrypto openTrade : cryptoOpenList) {
                     moneyCount = moneyCount.add(openTrade.getPosition());
                 }
-                up.setRunningCount(moneyCount);
-                up.setRunningPercent(decimalFormat.format(moneyCount.divide(up.getPositionNetWorth(),2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)))+'%');
-                if (up.getRunningCount() == null){
+                if (BigDecimal.ZERO.compareTo(moneyCount) == 0){
                     up.setRunningCount(BigDecimal.valueOf(0));
                     up.setRunningPercent("0%");
+                }else {
+                    up.setRunningCount(moneyCount);
+                    up.setRunningPercent(decimalFormat.format(moneyCount.divide(up.getPositionNetWorth(),2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)))+'%');
                 }
             }
         }
@@ -151,11 +154,23 @@ public class UranusPositionServiceImpl implements IUranusPositionService
                 }
             }
         }
-        String totalPercent = decimalFormat.format(totalCount.divide(uranusPositionMapper.selectUranusPositionByName("total").getPositionNetWorth(),2,RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100))) +'%';
+        String totalPercent;
+        if (BigDecimal.ZERO.compareTo(uranusPositionMapper.selectUranusPositionByName("total").getPositionNetWorth())!=0){
+            totalPercent = decimalFormat.format(totalCount.divide(uranusPositionMapper.selectUranusPositionByName("total").getPositionNetWorth(),2,RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100))) +'%';
+        }else {
+            totalPercent = "0";
+        }
+
         for (UranusPosition up2:list) {
             if (up2.getPositionName().equals("total")){
-                up2.setRunningPercent(totalPercent);
-                up2.setRunningCount(totalCount);
+                if (BigDecimal.ZERO.compareTo(totalCount)!=0){
+                    up2.setRunningPercent(totalPercent);
+                    up2.setRunningCount(totalCount);
+                } else {
+                    up2.setRunningPercent("0%");
+                    up2.setRunningCount(BigDecimal.valueOf(0));
+                }
+
             }
         }
         return list;
